@@ -87,13 +87,20 @@ renderer.setClearColor(debugObject.clearColor)
  */
 let particles = null
 
-gltfLoader.load('./models.glb', (gltf) =>
+gltfLoader.load('./models02.glb', (gltf) =>
 {
     particles = {}
     particles.index = 0
 
     // Positions
-    const positions = gltf.scene.children.map(child => child.geometry.attributes.position)
+    const positions = [];
+
+    gltf.scene.traverse(child => {
+        if (child.isMesh && child.geometry && child.geometry.attributes.position) {
+            positions.push(child.geometry.attributes.position);
+        }
+    });
+   // const positions = gltf.scene.children.map(child => child.geometry.attributes.position)
 
     particles.maxCount = 0
     for(const position of positions)
@@ -193,11 +200,15 @@ gltfLoader.load('./models.glb', (gltf) =>
     particles.morph1 = () => { particles.morph(1) }
     particles.morph2 = () => { particles.morph(2) }
     particles.morph3 = () => { particles.morph(3) }
+    particles.morph4 = () => { particles.morph(4) }
+    particles.morph5 = () => { particles.morph(5) }
 
     gui.add(particles, 'morph0')
     gui.add(particles, 'morph1')
     gui.add(particles, 'morph2')
     gui.add(particles, 'morph3')
+    gui.add(particles, 'morph4')
+    gui.add(particles, 'morph5')
 })
 
 /**
